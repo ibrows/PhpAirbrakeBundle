@@ -16,17 +16,23 @@ use Nodrew\Bundle\PhpAirbrakeBundle\Airbrake\Client,
  */
 class ShutdownListener
 {
+    /**
+     * @var Client
+     */
     protected $client;
 
+    /**
+     * @param Client $client
+     */
     public function __construct(Client $client)
     {
         $this->client = $client;
     }
-    
+
     /**
      * Register the handler on the request.
      *
-     * @param Symfony\Component\HttpKernel\Event\FilterControllerEvent $event
+     * @param FilterControllerEvent $event
      */
     public function register(FilterControllerEvent $event)
     {
@@ -46,7 +52,8 @@ class ShutdownListener
             return;
         }
 
-        $fatal  = array(E_ERROR,E_PARSE,E_CORE_ERROR,E_COMPILE_ERROR,E_USER_ERROR,E_RECOVERABLE_ERROR);
+        $fatal = array(E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR, E_RECOVERABLE_ERROR);
+
         if (!in_array($error['type'], $fatal)) {
             return;
         }
@@ -56,6 +63,7 @@ class ShutdownListener
         $backtrace = array(array('file' => $error['file'], 'line' => $error['line']));
 
         $this->client->notifyOnError($message, $backtrace);
+
         error_log($message.' in: '.$error['file'].':'.$error['line']);
     }
 }
