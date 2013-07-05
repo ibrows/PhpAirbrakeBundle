@@ -14,21 +14,8 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
  * @copyright	(c) 2012 Drew Butler
  * @license		http://www.opensource.org/licenses/mit-license.php
  */
-class ShutdownListener
+class ShutdownListener extends AbstractListener
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
-    /**
-     * @param Client $client
-     */
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
     /**
      * Register the handler on the request.
      *
@@ -62,8 +49,12 @@ class ShutdownListener
         $message   = sprintf($message, $error['message']);
         $backtrace = array(array('file' => $error['file'], 'line' => $error['line']));
 
-        $this->client->notifyOnError($message, $backtrace);
+        $errorMessage = $message.' in: '.$error['file'].':'.$error['line'];
 
-        error_log($message.' in: '.$error['file'].':'.$error['line']);
+        if(!$this->client->notifyOnError($message, $backtrace)){
+            $this->sendEmailOnError($errorMessage);
+        }
+
+        error_log($errorMessage);
     }
 }

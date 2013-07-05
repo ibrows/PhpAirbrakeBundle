@@ -15,21 +15,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  * @copyright	(c) 2011 Drew Butler
  * @license		http://www.opensource.org/licenses/mit-license.php
  */
-class ExceptionListener
+class ExceptionListener extends AbstractListener
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
-    /**
-     * @param Client $client
-     */
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
     /**
      * @param GetResponseForExceptionEvent $event
      */
@@ -40,7 +27,9 @@ class ExceptionListener
             return;
         }
         
-        $this->client->notifyOnException($exception);
+        if(!$this->client->notifyOnException($exception)){
+            $this->sendEmailOnError((string)$exception);
+        }
 
         error_log($exception->getMessage().' in: '.$exception->getFile().':'.$exception->getLine());
     }

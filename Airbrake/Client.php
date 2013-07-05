@@ -25,9 +25,10 @@ class Client extends AirbrakeClient
      * @param ContainerInterface $container
      * @param mixed $queue
      * @param string $apiEndPoint
+     * @param string $emailTo
      * @throws \Exception
      */
-    public function __construct($apiKey, $envName, ContainerInterface $container, $queue = null, $apiEndPoint = null)
+    public function __construct($apiKey, $envName, ContainerInterface $container, $queue = null, $apiEndPoint = null, $emailTo = null)
     {
         if (!$apiKey) {
             throw new \Exception("Need API-Key");
