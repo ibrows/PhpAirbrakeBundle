@@ -1,8 +1,8 @@
 <?php
 namespace Nodrew\Bundle\PhpAirbrakeBundle\EventListener;
 
-use Nodrew\Bundle\PhpAirbrakeBundle\Airbrake\Client,
-    Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Nodrew\Bundle\PhpAirbrakeBundle\Airbrake\Client;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /**
  * The PhpAirbrakeBundle ShutdownListener.

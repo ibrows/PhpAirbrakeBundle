@@ -10,7 +10,8 @@ use Symfony\Component\Config\FileLocator;
 class PhpAirbrakeExtension extends Extension
 {
     /**
-     * {@inheritDoc}
+     * @param array $configs
+     * @param ContainerBuilder $container
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -48,7 +49,7 @@ class PhpAirbrakeExtension extends Extension
     }
 
     /**
-     * {@inheritDoc}
+     * @return string
      */
     public function getXsdValidationBasePath()
     {
@@ -56,7 +57,7 @@ class PhpAirbrakeExtension extends Extension
     }
 
     /**
-     * {@inheritDoc}
+     * @return string
      */
     public function getNamespace()
     {

@@ -61,6 +61,5 @@ class Client extends AirbrakeClient
         }
 
         parent::__construct(new AirbrakeConfiguration($apiKey, $options));
-
     }
 }
