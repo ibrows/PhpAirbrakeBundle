@@ -23,7 +23,7 @@ class Client extends AirbrakeClient
     /**
      * @var bool
      */
-    protected $enabled = true;
+    protected $disabled = true;
 
     /**
      * @param AirbrakeConfiguration $apiKey
@@ -34,13 +34,13 @@ class Client extends AirbrakeClient
      * @param string $emailTo
      * @throws \Exception
      */
-    public function __construct($apiKey, $envName, ContainerInterface $container, $queue = null, $apiEndPoint = null, $emailTo = null, $enabled = true)
+    public function __construct($apiKey, $envName, ContainerInterface $container, $queue = null, $apiEndPoint = null, $emailTo = null, $disabled = false)
     {
         if (!$apiKey) {
             throw new \Exception("Need API-Key");
         }
 
-        $this->enabled = $enabled;
+        $this->disabled = $disabled;
 
         $request       = $container->get('request');
         $controller    = 'None';
@@ -82,8 +82,9 @@ class Client extends AirbrakeClient
      */
     public function notify(Notice $notice)
     {
-        if(true === $this->enabled){
-            parent::notify($notice);
+        if(true === $this->disabled){
+            return;
         }
+        parent::notify($notice);
     }
 }

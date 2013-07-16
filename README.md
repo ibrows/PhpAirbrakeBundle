@@ -75,7 +75,7 @@ php_airbrake:
     api_endpoint: [optional custom API endpoint eg. http://api.airbrake.io/notifier_api/v2/notices]
     queue: [optional resqueue queue name]
     email_to: test@test.ch
-    enabled: true
+    disabled: false # %kernel.debug% maybe
 ```
 
 *app/config/parameters.ini*
