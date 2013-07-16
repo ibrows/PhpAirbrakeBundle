@@ -4,6 +4,7 @@ namespace Nodrew\Bundle\PhpAirbrakeBundle\Airbrake;
 
 use Airbrake\Client as AirbrakeClient;
 use Airbrake\Configuration as AirbrakeConfiguration;
+use Airbrake\Notice;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,6 +21,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Client extends AirbrakeClient
 {
     /**
+     * @var bool
+     */
+    protected $enabled = true;
+
+    /**
      * @param AirbrakeConfiguration $apiKey
      * @param string $envName
      * @param ContainerInterface $container
@@ -28,11 +34,13 @@ class Client extends AirbrakeClient
      * @param string $emailTo
      * @throws \Exception
      */
-    public function __construct($apiKey, $envName, ContainerInterface $container, $queue = null, $apiEndPoint = null, $emailTo = null)
+    public function __construct($apiKey, $envName, ContainerInterface $container, $queue = null, $apiEndPoint = null, $emailTo = null, $enabled = true)
     {
         if (!$apiKey) {
             throw new \Exception("Need API-Key");
         }
+
+        $this->enabled = $enabled;
 
         $request       = $container->get('request');
         $controller    = 'None';
@@ -62,5 +70,20 @@ class Client extends AirbrakeClient
         }
 
         parent::__construct(new AirbrakeConfiguration($apiKey, $options));
+    }
+
+    /**
+     * Notify about the notice.
+     *
+     * If there is a PHP Resque client given in the configuration, then use that to queue up a job to
+     * send this out later. This should help speed up operations.
+     *
+     * @param Notice $notice
+     */
+    public function notify(Notice $notice)
+    {
+        if(true === $this->enabled){
+            parent::notify($notice);
+        }
     }
 }

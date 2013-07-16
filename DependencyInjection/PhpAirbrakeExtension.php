@@ -28,6 +28,7 @@ class PhpAirbrakeExtension extends Extension
         $container->setParameter('php_airbrake.api_endpoint', isset($config['api_endpoint']) ? $config['api_endpoint'] : null);
         $container->setParameter('php_airbrake.queue', isset($config['queue']) ? $config['queue'] : null);
         $container->setParameter('php_airbrake.email_to', isset($config['email_to']) ? $config['email_to'] : null);
+        $container->setParameter('php_airbrake.enabled', isset($config['enabled']) ? $config['enabled'] : true);
     }
 
     /**
