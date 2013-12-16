@@ -13,25 +13,32 @@ abstract class AbstractListener
     protected $client;
 
     /**
-     * @var string
-     */
-    protected $emailTo;
-
-    /**
      * @var \Swift_Mailer
      */
     protected $mailer;
 
     /**
-     * @param Client $client
-     * @param \Swift_Mailer $mailer
-     * @param string $emailToOnError
+     * @var string
      */
-    public function __construct(Client $client, Swift_Mailer $mailer, $emailTo = null)
+    protected $emailTo;
+
+    /**
+     * @var string
+     */
+    protected $emailFrom;
+
+    /**
+     * @param Client $client
+     * @param Swift_Mailer $mailer
+     * @param string $emailTo
+     * @param string $emailFrom
+     */
+    public function __construct(Client $client, Swift_Mailer $mailer, $emailTo = null, $emailFrom = null)
     {
         $this->client = $client;
-        $this->emailTo = $emailTo;
         $this->mailer = $mailer;
+        $this->emailTo = $emailTo;
+        $this->emailFrom = $emailFrom ?: $emailTo;
     }
 
     /**
@@ -46,6 +53,7 @@ abstract class AbstractListener
         $message = \Swift_Message::newInstance()
             ->setSubject('PhpAirbrake / Exception')
             ->setTo($this->emailTo)
+            ->setFrom($this->emailFrom)
             ->setBody($text)
         ;
 
