@@ -20,7 +20,6 @@
         "ibrows/php-airbrake": "1.*"
     },
     "autoload": {
-        "psr-0": { "Nodrew\\Bundle\\PhpAirbrakeBundle": "" }
-    },
-    "target-dir": "Nodrew/Bundle/PhpAirbrakeBundle"
+        "psr-4": { "Nodrew\\Bundle\\PhpAirbrakeBundle\\": "" }
+    }
 }
