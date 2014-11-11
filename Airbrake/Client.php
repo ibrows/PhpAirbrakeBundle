@@ -79,13 +79,13 @@ class Client extends AirbrakeClient
      * send this out later. This should help speed up operations.
      *
      * @param Notice $notice
-     * @return bool|string
+     * @return bool
      */
     public function notify(Notice $notice)
     {
         if(true === $this->disabled){
             return true;
         }
-        parent::notify($notice);
+        return parent::notify($notice);
     }
 }
