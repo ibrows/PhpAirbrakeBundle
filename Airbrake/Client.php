@@ -6,7 +6,7 @@ use Airbrake\Client as AirbrakeClient;
 use Airbrake\Configuration as AirbrakeConfiguration;
 use Airbrake\Notice;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * The PhpAirbrakeBundle Client Loader.
@@ -23,18 +23,19 @@ class Client extends AirbrakeClient
     /**
      * @var bool
      */
-    protected $disabled = false;
+    protected $enabled = false;
 
     /**
      * @param AirbrakeConfiguration $apiKey
      * @param string $envName
-     * @param ContainerInterface $container
+     * @param string $rootDir
+     * @param RequestStack $requestStack
      * @param mixed $queue
      * @param string $apiEndPoint
      * @param bool $enabled
      * @throws \Exception
      */
-    public function __construct($apiKey, $envName, ContainerInterface $container, $queue = null, $apiEndPoint = null, $enabled = false)
+    public function __construct($apiKey, $envName, $rootDir, RequestStack $requestStack, $queue = null, $apiEndPoint = null, $enabled = false)
     {
         if (!$apiKey) {
             throw new \Exception("Need API-Key");
@@ -42,9 +43,9 @@ class Client extends AirbrakeClient
 
         $this->enabled = $enabled;
 
-        $projectRoot    = realpath($container->getParameter('kernel.root_dir').'/..');
+        $projectRoot    = realpath($rootDir.'/..');
 
-        if (!$this->hasValidRequest($container)) {
+        if ($requestStack->getCurrentRequest() === null) {
             $serverData     = "";
             $getData        = "";
             $postData       = "";
@@ -52,7 +53,7 @@ class Client extends AirbrakeClient
             $action         = 'None';
             $component      = 'None';
         } else {
-            $request        = $container->get('request');
+            $request        = $requestStack->getCurrentRequest();
             $controller     = 'None';
             $action         = 'None';
 
@@ -102,16 +103,5 @@ class Client extends AirbrakeClient
             return true;
         }
         return parent::notify($notice);
-    }
-
-    /**
-     * Check if we have a valid request available.
-     * In symfony 2 we don't always have a request. For instance when calling through a Command.
-     * @param ContainerInterface $container
-     * @return boolean
-     */
-    private function hasValidRequest(ContainerInterface $container)
-    {
-        return $container->hasScope('request') && $container->isScopeActive('request');
     }
 }

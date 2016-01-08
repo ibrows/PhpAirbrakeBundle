@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
         <parameter key="php_airbrake.api_key"></parameter>
@@ -16,23 +16,24 @@
         <service id="php_airbrake.client" class="%php_airbrake.client.class%">
             <argument>%php_airbrake.api_key%</argument>
             <argument>%kernel.environment%</argument>
-            <argument type="service" id="service_container" />
+            <argument>%kernel.root_dir%</argument>
+            <argument type="service" id="request_stack"/>
             <argument>%php_airbrake.queue%</argument>
             <argument>%php_airbrake.api_endpoint%</argument>
             <argument>%php_airbrake.enabled%</argument>
         </service>
 
         <service id="php_airbrake.exception_listener" class="%php_airbrake.exception_listener.class%">
-            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
-            <argument type="service" id="php_airbrake.client" />
-            <argument type="service" id="mailer" />
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException"/>
+            <argument type="service" id="php_airbrake.client"/>
+            <argument type="service" id="mailer"/>
             <argument>%php_airbrake.email_to%</argument>
         </service>
 
         <service id="php_airbrake.shutdown_listener" class="%php_airbrake.shutdown_listener.class%">
-            <tag name="kernel.event_listener" event="kernel.controller" method="register" />
-            <argument type="service" id="php_airbrake.client" />
-            <argument type="service" id="mailer" />
+            <tag name="kernel.event_listener" event="kernel.controller" method="register"/>
+            <argument type="service" id="php_airbrake.client"/>
+            <argument type="service" id="mailer"/>
             <argument>%php_airbrake.email_to%</argument>
         </service>
     </services>
