@@ -21,5 +21,11 @@
     },
     "autoload": {
         "psr-4": { "Nodrew\\Bundle\\PhpAirbrakeBundle\\": "" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Nodrew\\Bundle\\PhpAirbrakeBundle\\Test\\": "tests" }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.6"
     }
 }
