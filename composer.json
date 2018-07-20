@@ -19,6 +19,7 @@
         "symfony/swiftmailer-bundle": "~2.0|^3.0",
         "ibrows/php-airbrake": "1.*"
     },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": { "Nodrew\\Bundle\\PhpAirbrakeBundle\\": "" }
     },
