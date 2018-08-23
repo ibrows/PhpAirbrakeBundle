@@ -42,7 +42,7 @@ class Client extends AirbrakeClient
 
         $this->disabled = $disabled;
 
-        $request       = $container->get('request');
+        $request       = $container->get('request_stack')->getCurrentRequest();
         $controller    = 'None';
         $action        = 'None';
 
